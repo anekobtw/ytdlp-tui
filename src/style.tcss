@@ -1,0 +1,21 @@
+Header {
+    content-align: center middle;
+}
+
+#url-input {
+    width: 3fr;
+}
+
+#dl-button {
+    margin: 0 0 0 4;
+}
+
+#prbar {
+    margin: 7 0 0 0;
+    align: center middle;
+}
+
+.container {
+    align: center middle;
+    margin: 4 3 0 3;
+}
