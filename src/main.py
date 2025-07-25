@@ -9,7 +9,7 @@ from yt_dlp import YoutubeDL
 
 class ytdlp_cli(App):
     theme = "tokyo-night"
-    TITLE = "ytdlp-cli"
+    TITLE = "ytdlp-tui"
     SUB_TITLE = "Paste a URL and start downloading instantly."
     CSS_PATH = "style.tcss"
 
