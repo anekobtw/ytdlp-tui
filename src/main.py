@@ -13,31 +13,33 @@ class ytdlp_cli(App):
     SUB_TITLE = "Paste a URL and start downloading instantly."
     CSS_PATH = "style.tcss"
 
-    async def on_mount(self) -> None:
-        await self.mount(Header(show_clock=True))
+    def compose(self) -> ComposeResult:
+        yield Header(show_clock=True)
 
-        await self.mount(Center(ProgressBar(id="progressbar")))
+        yield Center(ProgressBar(id="progressbar", classes="default"))
 
-        await self.mount(
-            HorizontalGroup(
-                Input(placeholder="Video URL", type="text", id="url-input"),
-                Button(label="Download", variant="primary", id="dl-button"),
-                classes="container",
-            )
+        yield Center(Input(placeholder="Video URL", id="url-input", classes="default"))
+
+        yield HorizontalGroup(
+            Input(placeholder="Start time", id="url-start-time", classes="default"),
+            Input(placeholder="End time", id="url-end-time", classes="default"),
+            classes="default centered",
         )
 
+        yield Center(Button(label="Download", variant="primary", id="dl-button", classes="default"))
+
     @on(Input.Submitted)
-    async def submitted(self, event: Input.Changed) -> None:
+    def submitted(self, event: Input.Changed) -> None:
         self.download(event.value)
 
     @on(Button.Pressed)
-    async def pressed(self, event: Button.Pressed) -> None:
+    def pressed(self, event: Button.Pressed) -> None:
         self.download(self.query_one("#url-input", Input).value)
 
     @work(exclusive=True, exit_on_error=False, thread=True)
     async def download(self, url: str) -> None:
         opts = {
-            "format": "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]",
+            "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/b[ext=mp4]",
             "quiet": True,
             "progress_hooks": [self.progress_hook],
         }
@@ -47,14 +49,15 @@ class ytdlp_cli(App):
                 self.query_one("#url-input", Input).disabled = True
                 self.query_one("#dl-button", Button).disabled = True
                 ydl.download(url)
+                self.notify(message="Your video has been successfully downloaded!")
+
             except Exception as e:
                 self.notify(
                     title="Error occured while downloading!",
                     message=str(e),
                     severity="error",
                 )
-            else:
-                self.notify(message="Your video has been successfully downloaded!")
+
             finally:
                 self.query_one("#url-input", Input).disabled = False
                 self.query_one("#dl-button", Button).disabled = False

@@ -1,16 +1,16 @@
-#url-input {
-    width: 3fr;
+.default {
+    margin: 1;
 }
 
-#dl-button {
-    margin: 0 0 0 4;
+.centered {
+    align-horizontal: center;
+}
+
+Input {
+    width: 65;
 }
 
 #progressbar {
-    margin: 7 0 0 0;
+    margin: 7 0 5 0;
 }
 
-.container {
-    align: center middle;
-    margin: 4 3 0 3;
-}
